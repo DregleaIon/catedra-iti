@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    
+    {
+      "name": "Run Site (Edge + Python server)",
+      "type": "pwa-msedge",
+      "request": "launch",
+      "url": "http://127.0.0.1:5500",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "Start local server (Python 5500)",
+      "postDebugTask": "Stop local server (5500)"
+    },
+    {
+      "name": "Run Site (Chrome + Python server)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://127.0.0.1:5500",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "Start local server (Python 5500)",
+      "postDebugTask": "Stop local server (5500)"
+    },
+    {
+      "name": "Start Python server only",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "py -m http.server 5500",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

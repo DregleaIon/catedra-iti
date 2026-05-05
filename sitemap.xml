@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://catedra-it.example.com/index.html</loc>
+  </url>
+  <url>
+    <loc>https://catedra-it.example.com/despre.html</loc>
+  </url>
+  <url>
+    <loc>https://catedra-it.example.com/profesori.html</loc>
+  </url>
+  <url>
+    <loc>https://catedra-it.example.com/profesor.html</loc>
+  </url>
+  <url>
+    <loc>https://catedra-it.example.com/studenti.html</loc>
+  </url>
+  <url>
+    <loc>https://catedra-it.example.com/media.html</loc>
+  </url>
+  <url>
+    <loc>https://catedra-it.example.com/noutati.html</loc>
+  </url>
+  <url>
+    <loc>https://catedra-it.example.com/tendinte.html</loc>
+  </url>
+  <url>
+    <loc>https://catedra-it.example.com/contact.html</loc>
+  </url>
+</urlset>
