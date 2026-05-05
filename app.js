@@ -915,7 +915,7 @@ function SiteHeader({ activePage, theme, onToggleTheme, visitCount }) {
   return template`
     <header className="top-strip">
       <div className="container top-strip-inner">
-        <p>Catedra Informatică și Tehnologii Informaționale - Universitatea de Stat din Tiraspol</p>
+        <p>Catedra Informatică și Tehnologii Informaționale - Universitatea Pedagocică de Stat „Ion Creangă”</p>
         <p>Tendințe și perspective</p>
         <p style=${{ fontSize: '1.1rem', fontWeight: 600 }}>${visitCount !== null ? `Vizite pe acest browser: ${visitCount}` : 'Vizite indisponibile'}</p>
       </div>
@@ -1620,7 +1620,7 @@ function MediaPage() {
                         style=${{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', borderRadius: '4px', display: 'block' }}
                         onError=${(e) => { e.target.style.display = 'none'; }}
                       />
-                      <p className="chip" style=${{ marginTop: '8px' }}>${item.category}</p>
+                      <p className="chip" style=${{ marginTop: '8px', color: '#fff' }}>${item.category}</p>
                     </button>
                   `
               )}
@@ -1639,7 +1639,7 @@ function MediaPage() {
                   alt=${lightboxItem.title}
                   style=${{ maxWidth: '100%', maxHeight: '75vh', objectFit: 'contain', borderRadius: '6px', display: 'block', margin: '0 auto' }}
                 />
-                <p className="chip" style=${{ marginTop: '12px' }}>${lightboxItem.category}</p>
+                <p className="chip" style=${{ marginTop: '12px', color: '#fff' }}>${lightboxItem.category}</p>
               </div>
             </div>
           `
@@ -2145,7 +2145,7 @@ function App() {
         onToggleTheme=${() =>
           setTheme((previousTheme) => (previousTheme === 'light' ? 'dark' : 'light'))}
       />
-      <main style=${{ fontSize: '1.35rem', lineHeight: 1.75 }}>
+      <main style=${{ fontSize: '1.08rem', lineHeight: 1.65, letterSpacing: '0.01em' }}>
         <${PageContent} activePage=${activePage} onNotify=${notify} />
       </main>
       <${SiteFooter} />
