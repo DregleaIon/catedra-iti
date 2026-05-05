@@ -356,6 +356,17 @@ const newsItems = [
       '663287335_122183432756835195_3427539381910939276_n.jpg',
       '663359463_122183432846835195_8289795808014619622_n.jpg'
     ].map(f => './conferinta studenteasca/' + f),
+    pinned: false
+  },
+  {
+    id: 'n7',
+    dateIso: '2026-04-24',
+    displayDate: '24 aprilie 2026',
+    category: 'Distincție academică',
+    title: 'Prof. univ. Liubomir Chiriac — Membru Corespondent al Academiei de Științe a Moldovei',
+    excerpt: 'Colectivul Catedrei ITI felicită șeful catedrei, prof. univ. dr. hab. Liubomir Chiriac, pentru acordarea titlului de Membru Corespondent al Academiei de Științe a Moldovei.',
+    content: 'Colectivul Catedrei Informatică și Tehnologii Informaționale din cadrul Universității Pedagogice de Stat „Ion Creangă" din Chișinău exprimă profundă apreciere pentru acordarea titlului de Membru corespondent al Academiei de Științe a Moldovei domnului doctor habilitat, profesor universitar, șef al catedrei Informatică și Tehnologii Informaționale, Liubomir CHIRIAC.\n\nDistincția conferită conturează impactul de durată al activității desfășurate, reflectând rigoarea profesională, spiritul inovator și rolul definitoriu în consolidarea și modernizarea învățământului superior.\n\nSunt adresate urări de sănătate, inspirație și rezultate remarcabile în activitatea viitoare.\n\nCu considerație,\nColectivul Catedrei Informatică și Tehnologii Informaționale\n\n***\n\nКоллектив кафедры информатики и информационных технологий ГБУ «Ion Creanga» г. Кишинев выражает глубокую признательность за присвоение звания члена-корреспондента Академии наук Молдовы одаренному доктору, профессору университета, заведующему кафедрой информационных технологий Любомиру ХИРИАК.\n\nВрученное отличие говорит о долговременном влиянии проводимой деятельности, отражающем профессиональную строгость, инновационный дух и определяющую роль в укреплении и модернизации.\n\nПожелания здоровья, вдохновения и замечательных результатов в будущей деятельности.\n\nС учетом того,\nКоллектив кафедры компьютерных и информационных технологий',
+    photos: ['./foto%20catedra/corespondent.jpg'],
     pinned: true
   }
 ];
