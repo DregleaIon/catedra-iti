@@ -1,14 +1,14 @@
-﻿const runtimeConfig = window.IT_SITE_CONFIG || {};
+﻿const config = window.IT_SITE_CONFIG || {};
 const { useEffect, useMemo, useRef, useState } = React;
-const template = htm.bind(React.createElement);
+const html = htm.bind(React.createElement);
 
-const STORAGE_KEYS = {
+const cheiLocalStorage = {
   theme: 'it-catedra-theme',
   visitCount: 'it-catedra-visit-count',
   visitSessionFlag: 'it-catedra-visit-session'
 };
 
-const PAGE_DEFINITIONS = {
+const configurariPagini = {
   home: {
     title: 'Catedra Informatică și Tehnologii Informaționale Universitatea Pedagocică de Stat „Ion Creangă”',
     subtitle:
@@ -54,7 +54,7 @@ const PAGE_DEFINITIONS = {
   }
 };
 
-const DEFAULT_NAV_LINKS = [
+const linkuriMeniu = [
   { key: 'home', href: 'index.html', label: 'Acasă' },
   { key: 'despre', href: 'despre.html', label: 'Despre' },
   { key: 'profesori', href: 'profesori.html', label: 'Profesori' },
@@ -65,31 +65,31 @@ const DEFAULT_NAV_LINKS = [
   { key: 'contact', href: 'contact.html', label: 'Contact' }
 ];
 
-const NAV_LINKS =
-  Array.isArray(runtimeConfig.navLinks) && runtimeConfig.navLinks.length > 0
-    ? runtimeConfig.navLinks
-    : DEFAULT_NAV_LINKS;
+const meniuSite =
+  Array.isArray(config.navLinks) && config.navLinks.length > 0
+    ? config.navLinks
+    : linkuriMeniu;
 
-const IS_WORDPRESS_MODE = NAV_LINKS.some(
+const modWordPress = meniuSite.some(
   (item) => typeof item.href === 'string' && item.href.includes('view=')
 );
 
-const departmentStats = [
-  { value: '1930', label: 'Anul fondării UST', progress: '100%' },
-  { value: '1940', label: 'Anul fondării UPSC', progress: '100%' },
-  { value: '1985', label: 'Fondarea Catedrei ITI', progress: '100%' },
+const statisticiCatedra = [
+  { value: '1930', label: 'Anul fondării Facultății Fizico-Matematice și Tehnologii Informaționale', progress: '100%' },
+  { value: '1940', label: 'Anul fondării Universității Pedagocice de Stat „Ion Creangă” din Chișinău', progress: '100%' },
+  { value: '1985', label: 'Fondarea Catedrei Informatică și Tehnologii Informaționale', progress: '100%' },
   { value: '8', label: 'Laboratoare moderne IT', progress: '100%' },
   { value: '1000+', label: 'Publicații științifice și didactice', progress: '100%' }
 ];
 
-const TEACHER_DEFAULTS = Object.freeze({
+const dateDefaultProfesor = Object.freeze({
   field: 'Informatică și Tehnologii Informaționale',
   subjects: 'Discipline: Programare, Tehnologii Web, Baze de date, Inteligență artificială',
   office: 'Str. Ghenadie Iablocikin 5, Chișinău',
   officeHours: 'Luni - Vineri, 09:00 - 16:00'
 });
 
-const TEACHER_ROSTER = [
+const profesoriCatedra = [
   {
     name: 'Liubomir Chiriac',
     role: 'șef catedra ITI, dr. hab., prof. univ',
@@ -172,9 +172,9 @@ const TEACHER_ROSTER = [
   }
 ];
 
-const teacherProfiles = TEACHER_ROSTER.map((teacher, index) => ({
+const profileProfesori = profesoriCatedra.map((teacher, index) => ({
   id: `p${index + 1}`,
-  ...TEACHER_DEFAULTS,
+  ...dateDefaultProfesor,
   achievements: [],
   publications: [],
   ...teacher,
@@ -182,7 +182,7 @@ const teacherProfiles = TEACHER_ROSTER.map((teacher, index) => ({
   researchTags: teacher.researchTags ? [...teacher.researchTags] : ['Informatică'],
   bio: teacher.bio || `${teacher.role} în cadrul catedrei ITI.`
 }));
-const CV_FILES = {
+const fisiereCv = {
   'Angela Globa': [{ label: 'Deschide CV', file: 'cvGloba  Angela 28.04.2026.pdf' }],
   'Ala Gașnaș': [{ label: 'Deschide CV', file: 'CV_Gasnas_Ala 2026_Catedra.pdf' }],
   'Lilia Mihălache': [{ label: 'Deschide CV', file: 'CV_Lilia_Mihălache.pdf' }],
@@ -196,7 +196,7 @@ const CV_FILES = {
   'Tatiana Veveriță': [{ label: 'Deschide CV', file: 'CV_Site_Veverita_Tatiana.pdf' }]
 };
 
-const STUDY_FILES = {
+const planuriiDeStudii = {
   ciclu1: [
     { label: 'Informatică', file: './ciclul1/Informatica_f.pdf' },
     { label: 'Informatică (frecvență redusă)', file: './ciclul1/invatamant%20cu%20frecventa%20redusa/Informatica_SE.pdf' },
@@ -231,7 +231,7 @@ const studyPrograms = [
   }
 ];
 
-const calendarItems = [
+const evenimenteIstorice = [
   {
     date: '15 octombrie 1985',
     title: 'Constituirea Catedrei Informatică și Tehnică de Calcul',
@@ -254,7 +254,7 @@ const calendarItems = [
   }
 ];
 
-const newsItems = [
+const articoleNoutati = [
   {
     id: 'n1',
     dateIso: '2021-10-30',
@@ -371,17 +371,17 @@ const newsItems = [
   }
 ];
 
-const sortedNewsItems = [...newsItems].sort(
-  (leftItem, rightItem) => new Date(rightItem.dateIso) - new Date(leftItem.dateIso)
+const noutatiSortate = [...articoleNoutati].sort(
+  (a, b) => new Date(b.dateIso) - new Date(a.dateIso)
 );
 
-const videoItems = [
+const videoclipuri = [
   { title: 'Prezentare generală a catedrei', link: 'https://www.ust.md', tag: 'Instituțional' },
   { title: 'Laboratoare și infrastructură IT', link: 'https://www.ust.md', tag: 'Campus' },
   { title: 'Proiecte ale studenților', link: 'https://www.ust.md', tag: 'Proiecte' }
 ];
 
-const GALLERY_CATEDRA_FILES = [
+const pozeCatedra = [
   '0.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg', '11.jpg', '12.jpg',
   '13.jpg', '14.jpg', '15.jpg', '19.jpg', '20.jpg', '22.jpg', '23.jpg', '24.jpg',
   '25.jpg', '26.jpg', '29.jpg', '30.jpg', '31.jpg', '32.jpg', '33.jpg', '37.jpg',
@@ -389,7 +389,7 @@ const GALLERY_CATEDRA_FILES = [
   'catedra iti emblema.jpg', 'emblema iti.jpg', 'citi 40 de ani.jpg', 'fmti 95 ani copy.jpg'
 ];
 
-const GALLERY_CONFERINTA_FILES = [
+const pozeConferinta = [
   '659638009_122183431772835195_1443761851665853884_n.jpg',
   '659740443_122183432942835195_2105269260457279348_n.jpg',
   '659799932_122183431460835195_3832111940224155701_n.jpg',
@@ -428,24 +428,37 @@ const GALLERY_CONFERINTA_FILES = [
   '663359463_122183432846835195_8289795808014619622_n.jpg'
 ];
 
-const galleryItems = [
-  ...GALLERY_CATEDRA_FILES.map((f, i) => ({
+const pozeActivitati = [
+  '1. Y DSC05694.jpg',
+  '6. DSC05704.jpg',
+  '8. DSC05705 (1).jpg',
+  '21 iulie 1.jpg',
+];
+
+const elementeGalerie = [
+  ...pozeCatedra.map((f, i) => ({
     id: `gc${i}`,
-    src: getCatedraImagePath(f),
+    src: caleImagine(f),
     category: 'Catedra ITI',
     title: `Catedra ITI — foto ${i + 1}`
   })),
-  ...GALLERY_CONFERINTA_FILES.map((f, i) => ({
+  ...pozeConferinta.map((f, i) => ({
     id: `gconf${i}`,
     src: `./conferinta%20studenteasca/${encodeURIComponent(f)}`,
     category: 'Conferință Studențească',
     title: `Conferință studențească 2026 — foto ${i + 1}`
+  })),
+  ...pozeActivitati.map((f, i) => ({
+    id: `ga${i}`,
+    src: `./fotografii/${encodeURIComponent(f)}`,
+    category: 'Activități Catedra',
+    title: `Activități Catedra ITI — foto ${i + 1}`
   }))
 ];
 
-const EMBLEM_IMAGE_FILES = ['catedra iti emblema.jpg', 'emblema iti.jpg'];
+const emblemeCatedra = ['catedra iti emblema.jpg', 'emblema iti.jpg'];
 
-const HOME_CAROUSEL_IMAGE_FILES = [
+const pozeCarusel = [
   '0.jpg',
   '6.jpg',
   '7.jpg',
@@ -478,13 +491,13 @@ const HOME_CAROUSEL_IMAGE_FILES = [
   '43.jpg'
 ];
 
-const HOME_HERO_BACKGROUND_IMAGE_FILES = ['fmti 95 ani copy.jpg', 'citi 40 de ani.jpg'];
+const fundaluriHero = ['fmti 95 ani copy.jpg', 'citi 40 de ani.jpg'];
 
-function getCatedraImagePath(fileName) {
+function caleImagine(fileName) {
   return `./foto%20catedra/${encodeURIComponent(fileName)}`;
 }
 
-const tendinteChapters = [
+const capitoleIstorice = [
   'Istoria Catedrei ITI',
   'Informații esențiale despre Catedră',
   'Evenimente importante ale Catedrei',
@@ -492,7 +505,7 @@ const tendinteChapters = [
   'Membrii Catedrei ITI'
 ];
 
-const historicalTimeline = [
+const cronologieCatedra = [
   {
     year: '1930',
     title: 'Fondarea UST',
@@ -535,14 +548,14 @@ const historicalTimeline = [
   }
 ];
 
-const currentFacilities = [
+const facilitatiActuale = [
   '8 săli de calculatoare moderne conectate la Internet',
   'Laboratorul Tehnologii Informaționale „Prof. Doctor Iulian Marcov”',
   'Laboratorul „Creative Artificial Intelligence” (CRAI Lab)',
   'Laboratorul „Algoritmi și Programare. Cyber”'
 ];
 
-const studySpecialties = [
+const specialitatiStudii = [
   'Informatică',
   'Informatică și Matematică',
   'Informatică și Fizică',
@@ -551,7 +564,7 @@ const studySpecialties = [
   'Geografie și Informatică'
 ];
 
-const bachelorDisciplines = [
+const disciplineLicenta = [
   'Sisteme de operare și arhitectura calculatorului',
   'Fundamentele Programării (Pascal)',
   'Programare în limbajul C',
@@ -566,7 +579,7 @@ const bachelorDisciplines = [
   'JavaScript, analiza algoritmilor, rețele de calculatoare'
 ];
 
-const masterDisciplines = [
+const disciplineMasterat = [
   'Tehnologii Web avansate',
   'Criptografie și securitate informațională',
   'Sisteme distribuite',
@@ -579,7 +592,7 @@ const masterDisciplines = [
   'Prelucrarea statistică a informației psihopedagogice'
 ];
 
-const researchDirections = [
+const directiiCercetare = [
   {
     title: 'Rețele Petri, grafuri, modele computaționale',
     topics: [
@@ -606,7 +619,7 @@ const researchDirections = [
   }
 ];
 
-const majorProjects = [
+const proiecteMajore = [
   'Tempus WETEN (2009-2011)',
   'Tempus IV TEREC (2010-2013)',
   'Tempus IV QUAEM (2012-2014)',
@@ -616,7 +629,7 @@ const majorProjects = [
   'Program de Stat STEAM (2020-2023)'
 ];
 
-const partnerInstitutions = [
+const institutiiPartenere = [
   'Institutul de Tehnologii din Kaunas (Lituania)',
   'Universitatea Regală de Tehnologii din Stockholm (Suedia)',
   'Universitatea din Hasselt (Belgia)',
@@ -628,7 +641,7 @@ const partnerInstitutions = [
   'Universitatea din Genova (Italia)'
 ];
 
-const presentMembers = [
+const membriCatedra = [
   'Liubomir Chiriac - doctor habilitat, profesor universitar, șef catedră ITI',
   'Andrei Braicov - doctor, conferențiar universitar, decan FMTI',
   'Angela Globa - doctor, conferențiar universitar, prorector',
@@ -651,7 +664,7 @@ const presentMembers = [
   'Dumitru Rugaliov - inginer asistent'
 ];
 
-const didYouKnowFacts = [
+const curiozitati = [
   'UST (1930) este prima instituție de învățământ superior din Moldova.',
   'Facultatea FMTI (1930) este prima facultate de profil matematic-fizic din Moldova.',
   'Catedra ITI (1985) este prima catedră de informatică din Moldova.',
@@ -659,11 +672,11 @@ const didYouKnowFacts = [
   'UST a format peste 100.000 de specialiști, activi în educație, administrație și cercetare.'
 ];
 
-function normalizePage(value) {
+function normalizeazaPagina(value) {
   return typeof value === 'string' ? value.trim().toLowerCase() : '';
 }
 
-function normalizeForSearch(value) {
+function normalizeazaCautare(value) {
   return (value || '')
     .toString()
     .toLowerCase()
@@ -672,11 +685,11 @@ function normalizeForSearch(value) {
     .trim();
 }
 
-function getQueryParameter(parameterName) {
+function getParamUrl(parameterName) {
   return new URLSearchParams(window.location.search).get(parameterName);
 }
 
-function appendQueryParams(href, params) {
+function adaugaParamUrl(href, params) {
   if (!href || href === '#') {
     return '#';
   }
@@ -697,44 +710,44 @@ function appendQueryParams(href, params) {
   return `${basePath}${nextQuery ? `?${nextQuery}` : ''}${hashValue ? `#${hashValue}` : ''}`;
 }
 
-function getActivePageKey() {
-  const allowedPages = Object.keys(PAGE_DEFINITIONS);
-  const queryPage = normalizePage(getQueryParameter('view'));
-  const datasetPage = normalizePage(document.body.getAttribute('data-page'));
-  const configPage = normalizePage(runtimeConfig.defaultPage);
+function getPaginaActiva() {
+  const allowedPages = Object.keys(configurariPagini);
+  const queryPage = normalizeazaPagina(getParamUrl('view'));
+  const datasetPage = normalizeazaPagina(document.body.getAttribute('data-page'));
+  const configPage = normalizeazaPagina(config.defaultPage);
   const candidate = queryPage || datasetPage || configPage || 'home';
 
   return allowedPages.includes(candidate) ? candidate : 'home';
 }
 
-function getHrefByKey(pageKey) {
-  const foundLink = NAV_LINKS.find((item) => item.key === pageKey);
+function getLinkPagina(pageKey) {
+  const foundLink = meniuSite.find((item) => item.key === pageKey);
   return foundLink ? foundLink.href : '#';
 }
 
-function getNewsHref(articleId) {
-  if (IS_WORDPRESS_MODE) {
-    return appendQueryParams(getHrefByKey('home'), { view: 'noutati', article: articleId });
+function getLinkArticol(articleId) {
+  if (modWordPress) {
+    return adaugaParamUrl(getLinkPagina('home'), { view: 'noutati', article: articleId });
   }
 
-  const baseHref = getHrefByKey('noutati') || 'noutati.html';
-  return appendQueryParams(baseHref, { article: articleId });
+  const baseHref = getLinkPagina('noutati') || 'noutati.html';
+  return adaugaParamUrl(baseHref, { article: articleId });
 }
 
-function getTeacherProfileHref(teacherId) {
-  if (IS_WORDPRESS_MODE) {
-    return appendQueryParams(getHrefByKey('home'), { view: 'profesor', id: teacherId });
+function getLinkProfil(teacherId) {
+  if (modWordPress) {
+    return adaugaParamUrl(getLinkPagina('home'), { view: 'profesor', id: teacherId });
   }
 
-  return appendQueryParams('profesor.html', { id: teacherId });
+  return adaugaParamUrl('profesor.html', { id: teacherId });
 }
 
-function getTeacherById(teacherId) {
-  const normalizedTeacherId = normalizePage(teacherId);
-  return teacherProfiles.find((teacher) => teacher.id === normalizedTeacherId) || null;
+function cautaProfesor(teacherId) {
+  const normalizedTeacherId = normalizeazaPagina(teacherId);
+  return profileProfesori.find((teacher) => teacher.id === normalizedTeacherId) || null;
 }
 
-function setMetaTag(attributeName, attributeValue, contentValue) {
+function seteazaMeta(attributeName, attributeValue, contentValue) {
   if (!contentValue) {
     return;
   }
@@ -749,7 +762,7 @@ function setMetaTag(attributeName, attributeValue, contentValue) {
   node.setAttribute('content', contentValue);
 }
 
-function setCanonicalLink(urlValue) {
+function seteazaCanonical(urlValue) {
   if (!urlValue) {
     return;
   }
@@ -764,30 +777,30 @@ function setCanonicalLink(urlValue) {
   linkElement.setAttribute('href', urlValue);
 }
 
-function updateSeoForPage(activePage, teacher) {
-  const pageDefinition = PAGE_DEFINITIONS[activePage] || PAGE_DEFINITIONS.home;
+function actualizeazaSeo(activePage, teacher) {
+  const pageDefinition = configurariPagini[activePage] || configurariPagini.home;
   const computedTitle = teacher ? `${teacher.name} | Catedra ITI` : `${pageDefinition.title} | Catedra ITI`;
   const computedDescription = teacher
     ? teacher.bio
     : pageDefinition.subtitle || 'Catedra Informatică și Tehnologii Informaționale Universitatea Pedagocică de Stat „Ion Creangă”';
 
   document.title = computedTitle;
-  setMetaTag('name', 'description', computedDescription);
-  setMetaTag('name', 'robots', 'index,follow');
-  setMetaTag('name', 'twitter:card', 'summary_large_image');
-  setMetaTag('name', 'twitter:title', computedTitle);
-  setMetaTag('name', 'twitter:description', computedDescription);
-  setMetaTag('property', 'og:type', teacher ? 'profile' : 'website');
-  setMetaTag('property', 'og:locale', 'ro_RO');
-  setMetaTag('property', 'og:title', computedTitle);
-  setMetaTag('property', 'og:description', computedDescription);
-  setMetaTag('property', 'og:url', window.location.href.split('#')[0]);
-  setCanonicalLink(window.location.href.split('#')[0]);
+  seteazaMeta('name', 'description', computedDescription);
+  seteazaMeta('name', 'robots', 'index,follow');
+  seteazaMeta('name', 'twitter:card', 'summary_large_image');
+  seteazaMeta('name', 'twitter:title', computedTitle);
+  seteazaMeta('name', 'twitter:description', computedDescription);
+  seteazaMeta('property', 'og:type', teacher ? 'profile' : 'website');
+  seteazaMeta('property', 'og:locale', 'ro_RO');
+  seteazaMeta('property', 'og:title', computedTitle);
+  seteazaMeta('property', 'og:description', computedDescription);
+  seteazaMeta('property', 'og:url', window.location.href.split('#')[0]);
+  seteazaCanonical(window.location.href.split('#')[0]);
 }
 
-function getInitialTheme() {
+function getTemaInitiala() {
   try {
-    const storedTheme = localStorage.getItem(STORAGE_KEYS.theme);
+    const storedTheme = localStorage.getItem(cheiLocalStorage.theme);
     if (storedTheme === 'light' || storedTheme === 'dark') {
       return storedTheme;
     }
@@ -800,11 +813,11 @@ function getInitialTheme() {
     : 'light';
 }
 
-function applyTheme(themeName) {
+function aplicaTema(themeName) {
   document.documentElement.setAttribute('data-theme', themeName);
 
   try {
-    localStorage.setItem(STORAGE_KEYS.theme, themeName);
+    localStorage.setItem(cheiLocalStorage.theme, themeName);
   } catch (error) {
     return null;
   }
@@ -812,31 +825,31 @@ function applyTheme(themeName) {
   return null;
 }
 
-function registerAndGetVisitCount() {
+function inregistreazaVizita() {
   try {
-    const rawCount = localStorage.getItem(STORAGE_KEYS.visitCount);
+    const rawCount = localStorage.getItem(cheiLocalStorage.visitCount);
     const currentCount = Number.parseInt(rawCount || '0', 10);
     const safeCount = Number.isFinite(currentCount) ? currentCount : 0;
 
-    if (sessionStorage.getItem(STORAGE_KEYS.visitSessionFlag) === '1') {
+    if (sessionStorage.getItem(cheiLocalStorage.visitSessionFlag) === '1') {
       return safeCount;
     }
 
     const nextCount = safeCount + 1;
-    localStorage.setItem(STORAGE_KEYS.visitCount, String(nextCount));
-    sessionStorage.setItem(STORAGE_KEYS.visitSessionFlag, '1');
+    localStorage.setItem(cheiLocalStorage.visitCount, String(nextCount));
+    sessionStorage.setItem(cheiLocalStorage.visitSessionFlag, '1');
     return nextCount;
   } catch (error) {
     return null;
   }
 }
 
-function registerServiceWorkerIfPossible() {
+function initServiceWorker() {
   if (!('serviceWorker' in navigator)) {
     return;
   }
 
-  if (runtimeConfig.enableServiceWorker === false) {
+  if (config.enableServiceWorker === false) {
     return;
   }
 
@@ -855,15 +868,15 @@ function registerServiceWorkerIfPossible() {
   navigator.serviceWorker.register(serviceWorkerPath).catch(() => null);
 }
 
-function Section({ title, note, alt = false, children }) {
+function Sectiune({ title, note, alt = false, children }) {
   const sectionClassName = alt ? 'section section-alt' : 'section';
 
-  return template`
+  return html`
     <section className=${sectionClassName}>
       <div className="container">
         <div className="section-head">
           <h2>${title}</h2>
-          ${note ? template`<p>${note}</p>` : null}
+          ${note ? html`<p>${note}</p>` : null}
         </div>
         ${children}
       </div>
@@ -871,11 +884,11 @@ function Section({ title, note, alt = false, children }) {
   `;
 }
 
-function ThemeToggle({ theme, onToggle }) {
+function ComutatorTema({ theme, onToggle }) {
   const isDarkMode = theme === 'dark';
   const buttonLabel = isDarkMode ? 'Comută pe Light Mode' : 'Comută pe Dark Mode';
 
-  return template`
+  return html`
     <button type="button" className="theme-toggle" onClick=${onToggle} aria-label=${buttonLabel}>
       <span>${isDarkMode ? '🌙' : '☀️'}</span>
       <span>${isDarkMode ? 'Dark' : 'Light'}</span>
@@ -883,21 +896,21 @@ function ThemeToggle({ theme, onToggle }) {
   `;
 }
 
-function SiteHeader({ activePage, theme, onToggleTheme, visitCount }) {
+function AntetSite({ activePage, theme, onToggleTheme, visitCount }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [heroBackgroundIndex, setHeroBackgroundIndex] = useState(0);
-  const pageData = PAGE_DEFINITIONS[activePage] || PAGE_DEFINITIONS.home;
-  const isHomePage = activePage === 'home';
+  const pageData = configurariPagini[activePage] || configurariPagini.home;
+  const isPaginaAcasa = activePage === 'home';
 
-  const activeHeroBackgroundFile = HOME_HERO_BACKGROUND_IMAGE_FILES[
-    heroBackgroundIndex % HOME_HERO_BACKGROUND_IMAGE_FILES.length
+  const activeHeroBackgroundFile = fundaluriHero[
+    heroBackgroundIndex % fundaluriHero.length
   ];
   const heroBackgroundStyle = useMemo(() => {
     const overlay = theme === 'dark'
       ? 'linear-gradient(135deg, rgba(30, 58, 138, 0.72) 0%, rgba(55, 48, 163, 0.68) 50%, rgba(76, 29, 149, 0.7) 100%)'
       : 'linear-gradient(135deg, rgba(29, 78, 216, 0.72) 0%, rgba(79, 70, 229, 0.66) 50%, rgba(124, 58, 237, 0.68) 100%)';
     return {
-      backgroundImage: `${overlay}, url('${getCatedraImagePath(activeHeroBackgroundFile)}')`,
+      backgroundImage: `${overlay}, url('${caleImagine(activeHeroBackgroundFile)}')`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
@@ -916,14 +929,14 @@ function SiteHeader({ activePage, theme, onToggleTheme, visitCount }) {
   useEffect(() => {
     const timerId = window.setInterval(() => {
       setHeroBackgroundIndex(
-        (previousIndex) => (previousIndex + 1) % HOME_HERO_BACKGROUND_IMAGE_FILES.length
+        (prev) => (prev + 1) % fundaluriHero.length
       );
     }, 5000);
 
     return () => window.clearInterval(timerId);
   }, []);
 
-  return template`
+  return html`
     <header className="top-strip">
       <div className="container top-strip-inner">
         <p>Catedra Informatică și Tehnologii Informaționale - Universitatea Pedagocică de Stat „Ion Creangă”</p>
@@ -935,8 +948,8 @@ function SiteHeader({ activePage, theme, onToggleTheme, visitCount }) {
     <section className=”hero” style=${heroBackgroundStyle}>
       <div className=”container hero-inner” style=${{ width: '100%', textAlign: 'center' }}>
         <div className=”hero-copy hero-copy--center”>
-          ${isHomePage
-            ? template`
+          ${isPaginaAcasa
+            ? html`
                 <div style=${{ display: 'inline-flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap', justifyContent: 'center' }}>
                   <img
                     src=${'./LOGO%20CITI%20(1).svg'}
@@ -950,22 +963,22 @@ function SiteHeader({ activePage, theme, onToggleTheme, visitCount }) {
                   </h1>
                 </div>
               `
-            : template`<h1 style=${{ color: '#fff', textAlign: 'center', margin: 0, fontSize: '3.4rem', lineHeight: 1.2 }}>${pageData.title}</h1>`}
+            : html`<h1 style=${{ color: '#fff', textAlign: 'center', margin: 0, fontSize: '3.4rem', lineHeight: 1.2 }}>${pageData.title}</h1>`}
         </div>
       </div>
     </section>
 
     <nav className="navbar">
       <div className="container nav-inner">
-        <a className="brand" href=${getHrefByKey('home')} aria-label="Acasă Catedra ITI">
+        <a className="brand" href=${getLinkPagina('home')} aria-label="Acasă Catedra ITI">
           <span className="brand-logos" aria-hidden="true">
-            ${EMBLEM_IMAGE_FILES.map(
+            ${emblemeCatedra.map(
               (fileName) =>
-                template`
+                html`
                   <img
                     key=${fileName}
                     className="brand-emblem"
-                    src=${getCatedraImagePath(fileName)}
+                    src=${caleImagine(fileName)}
                     alt=""
                     onError=${(event) => {
                       event.currentTarget.style.display = 'none';
@@ -981,19 +994,19 @@ function SiteHeader({ activePage, theme, onToggleTheme, visitCount }) {
           <button
             type="button"
             className="menu-toggle"
-            onClick=${() => setIsMenuOpen((previousState) => !previousState)}
+            onClick=${() => setIsMenuOpen((prev) => !prev)}
             aria-expanded=${isMenuOpen}
             aria-label="Deschide meniul"
           >
             ${isMenuOpen ? 'Închide meniu' : 'Meniu'}
           </button>
-          <${ThemeToggle} theme=${theme} onToggle=${onToggleTheme} />
+          <${ComutatorTema} theme=${theme} onToggle=${onToggleTheme} />
         </div>
 
         <div className=${isMenuOpen ? 'menu is-open' : 'menu'}>
-          ${NAV_LINKS.map(
+          ${meniuSite.map(
             (item) =>
-              template`
+              html`
                 <a
                   key=${item.key || item.href}
                   href=${item.href}
@@ -1011,14 +1024,14 @@ function SiteHeader({ activePage, theme, onToggleTheme, visitCount }) {
   `;
 }
 
-function HomePage() {
+function PaginaAcasa() {
   const [announcementIndex, setAnnouncementIndex] = useState(0);
   const [carouselIndex, setCarouselIndex] = useState(0);
-  const latestNews = useMemo(() => sortedNewsItems.slice(0, 3), []);
+  const latestNews = useMemo(() => noutatiSortate.slice(0, 3), []);
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
-      setAnnouncementIndex((previousIndex) => (previousIndex + 1) % calendarItems.length);
+      setAnnouncementIndex((prev) => (prev + 1) % evenimenteIstorice.length);
     }, 5200);
 
     return () => window.clearInterval(timerId);
@@ -1026,17 +1039,17 @@ function HomePage() {
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
-      setCarouselIndex((previousIndex) => (previousIndex + 1) % HOME_CAROUSEL_IMAGE_FILES.length);
+      setCarouselIndex((prev) => (prev + 1) % pozeCarusel.length);
     }, 4200);
 
     return () => window.clearInterval(timerId);
   }, []);
 
-  const activeAnnouncement = calendarItems[announcementIndex];
-  const activeCarouselImage = HOME_CAROUSEL_IMAGE_FILES[carouselIndex];
+  const activeAnnouncement = evenimenteIstorice[announcementIndex];
+  const activeCarouselImage = pozeCarusel[carouselIndex];
 
-  return template`
-    <${Section}
+  return html`
+    <${Sectiune}
       title="Galerie foto Catedra ITI"
       note="Carousel cu imagini din activitățile catedrei, evenimente și laboratoare."
     >
@@ -1045,7 +1058,7 @@ function HomePage() {
           <div
             key=${activeCarouselImage}
             className="carousel-image"
-            style=${{ backgroundImage: `url('${getCatedraImagePath(activeCarouselImage)}')` }}
+            style=${{ backgroundImage: `url('${caleImagine(activeCarouselImage)}')` }}
             role="img"
             aria-label=""
           ></div>
@@ -1057,8 +1070,8 @@ function HomePage() {
             className="ghost-button"
             onClick=${() =>
               setCarouselIndex(
-                (previousIndex) =>
-                  (previousIndex - 1 + HOME_CAROUSEL_IMAGE_FILES.length) % HOME_CAROUSEL_IMAGE_FILES.length
+                (prev) =>
+                  (prev - 1 + pozeCarusel.length) % pozeCarusel.length
               )}
           >
             Anterior
@@ -1067,22 +1080,22 @@ function HomePage() {
             type="button"
             className="ghost-button"
             onClick=${() =>
-              setCarouselIndex((previousIndex) => (previousIndex + 1) % HOME_CAROUSEL_IMAGE_FILES.length)}
+              setCarouselIndex((prev) => (prev + 1) % pozeCarusel.length)}
           >
             Următor
           </button>
         </div>
       </article>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section}
-      title="Indicatori principali"
+    <${Sectiune}
+      title="Date Memorabile"
       note="Repere istorice și academice ale Catedrei ITI în cadrul UST."
     >
       <div className="grid grid-4">
-        ${departmentStats.map(
+        ${statisticiCatedra.map(
           (item) =>
-            template`
+            html`
               <article className="card stat-card" key=${item.label}>
                 <p className="stat-value">${item.value}</p>
                 <p className="stat-label">${item.label}</p>
@@ -1093,30 +1106,30 @@ function HomePage() {
             `
         )}
       </div>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section}
+    <${Sectiune}
       title="Explorează secțiunile site-ului"
       note="Meniul redirecționează pe pagini diferite, iar interfața este optimizată pentru desktop și mobil."
       alt=${true}
     >
       <div className="grid grid-3">
-        <a className="card quick-link" href=${getHrefByKey('despre')}>
+        <a className="card quick-link" href=${getLinkPagina('despre')}>
           <h3>Despre Catedră</h3>
           <p>Istoric, misiune, obiective strategice și infrastructură academică.</p>
         </a>
-        <a className="card quick-link" href=${getHrefByKey('profesori')}>
+        <a className="card quick-link" href=${getLinkPagina('profesori')}>
           <h3>Profesori</h3>
           <p>Căutare rapidă după rol și domeniu de expertiză + profil individual.</p>
         </a>
-        <a className="card quick-link" href=${getHrefByKey('media')}>
+        <a className="card quick-link" href=${getLinkPagina('media')}>
           <h3>Media și Galerie</h3>
           <p>Tab-uri pentru video și lightbox interactiv pe galerie.</p>
         </a>
       </div>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section}
+    <${Sectiune}
       title="Anunț evidențiat"
       note="Se actualizează automat din lista de evenimente, cu navigare manuală."
     >
@@ -1130,7 +1143,7 @@ function HomePage() {
             className="ghost-button"
             onClick=${() =>
               setAnnouncementIndex(
-                (previousIndex) => (previousIndex - 1 + calendarItems.length) % calendarItems.length
+                (prev) => (prev - 1 + evenimenteIstorice.length) % evenimenteIstorice.length
               )}
           >
             Anterior
@@ -1138,43 +1151,43 @@ function HomePage() {
           <button
             type="button"
             className="ghost-button"
-            onClick=${() => setAnnouncementIndex((previousIndex) => (previousIndex + 1) % calendarItems.length)}
+            onClick=${() => setAnnouncementIndex((prev) => (prev + 1) % evenimenteIstorice.length)}
           >
             Următor
           </button>
         </div>
       </article>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section}
+    <${Sectiune}
       title="Noutăți recente"
       note="Primele anunțuri importante sunt afișate direct pe pagina principală."
     >
       <div className="grid grid-3">
         ${latestNews.map(
           (newsItem) =>
-            template`
+            html`
               <article className="card news-card" key=${newsItem.id}>
                 <p className="news-meta">${newsItem.displayDate} · ${newsItem.category}</p>
                 <h3>${newsItem.title}</h3>
                 <p>${newsItem.excerpt}</p>
                 <div className="card-actions">
-                  <a className="ghost-button" href=${getNewsHref(newsItem.id)}>Citește detalii</a>
+                  <a className="ghost-button" href=${getLinkArticol(newsItem.id)}>Citește detalii</a>
                 </div>
               </article>
             `
         )}
       </div>
       <div className="section-inline-action">
-        <a className="ghost-button" href=${getHrefByKey('noutati')}>Vezi toate noutățile</a>
+        <a className="ghost-button" href=${getLinkPagina('noutati')}>Vezi toate noutățile</a>
       </div>
-    </${Section}>
+    </${Sectiune}>
   `;
 }
 
-function AboutPage() {
-  return template`
-    <${Section}
+function PaginaDescriere() {
+  return html`
+    <${Sectiune}
       title="Misiune și viziune"
       note="Catedra ITI formează specialiști competitivi, promovează cercetarea și dezvoltă educația digitală în Republica Moldova."
     >
@@ -1187,16 +1200,16 @@ function AboutPage() {
           </p>
         </article>
         <article className="card">
-          <h3>Viziune</h3>
+          <h3>Viziune Catedra ITI</h3>
           <p>
             Catedra urmărește consolidarea statutului de centru de referință în educație digitală, cercetare aplicată,
             cooperare internațională și integrare a standardelor europene în formarea profesională.
           </p>
         </article>
       </div>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section} title="Direcții de dezvoltare" alt=${true}>
+    <${Sectiune} title="Direcții de dezvoltare" alt=${true}>
       <div className="grid grid-3">
         <article className="card">
           <h3>Digitalizare curriculară</h3>
@@ -1211,9 +1224,9 @@ function AboutPage() {
           <p>Dezvoltarea laboratoarelor ITI și participarea în proiecte naționale/internaționale de tip Tempus, Erasmus+, NATO.</p>
         </article>
       </div>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section} title="Istoria dezvolarii Catedrei ITI">
+    <${Sectiune} title="Istoria dezvolarii Catedrei ITI">
       <div className="grid grid-2">
         <article className="card rich-text">
           <h3>Română</h3>
@@ -1248,12 +1261,12 @@ function AboutPage() {
           </div>
         </article>
       </div>
-    </${Section}>
+    </${Sectiune}>
   `;
 }
 
-function TeacherCard({ teacher, onCopyEmail }) {
-  return template`
+function CardProfesor({ teacher, onCopyEmail }) {
+  return html`
     <article className="card" key=${teacher.id}>
       <img
         className="teacher-photo"
@@ -1267,31 +1280,26 @@ function TeacherCard({ teacher, onCopyEmail }) {
       <h3>${teacher.name}</h3>
       <p className="chip chip-role">${teacher.role}</p>
       <p>${teacher.field}</p>
-      <p>${teacher.subjects}</p>
       <p className="meta-line">Email: ${teacher.email}</p>
       <div className="card-actions">
-        <button type="button" className="ghost-button" onClick=${() => onCopyEmail(teacher.email)}>
-          Copiază email
-        </button>
-        <a className="ghost-button" href=${`mailto:${teacher.email}`}>Trimite email</a>
-        <a className="ghost-button" href=${getTeacherProfileHref(teacher.id)}>Profil</a>
+        <a className="ghost-button" href=${getLinkProfil(teacher.id)}>Profil</a>
       </div>
     </article>
   `;
 }
 
-function ProfessorsPage({ onNotify }) {
+function PaginaProfesori({ onNotify }) {
   const [searchValue, setSearchValue] = useState('');
   const [selectedRole, setSelectedRole] = useState('all');
 
   const roleOptions = useMemo(() => {
-    return ['all', ...new Set(teacherProfiles.map((teacher) => teacher.role))];
+    return ['all', ...new Set(profileProfesori.map((teacher) => teacher.role))];
   }, []);
 
   const filteredTeachers = useMemo(() => {
-    const normalizedSearch = normalizeForSearch(searchValue);
+    const normalizedSearch = normalizeazaCautare(searchValue);
 
-    return teacherProfiles.filter((teacher) => {
+    return profileProfesori.filter((teacher) => {
       const matchesRole = selectedRole === 'all' || teacher.role === selectedRole;
 
       if (!matchesRole) {
@@ -1302,7 +1310,7 @@ function ProfessorsPage({ onNotify }) {
         return true;
       }
 
-      const searchableText = normalizeForSearch(
+      const searchableText = normalizeazaCautare(
         `${teacher.name} ${teacher.role} ${teacher.field} ${teacher.subjects} ${teacher.email}`
       );
 
@@ -1323,8 +1331,8 @@ function ProfessorsPage({ onNotify }) {
     }
   };
 
-  return template`
-    <${Section}
+  return html`
+    <${Sectiune}
       title="Cadre didactice"
       note="Filtrează lista după rol sau caută după nume, domeniu, disciplină și email."
     >
@@ -1343,7 +1351,7 @@ function ProfessorsPage({ onNotify }) {
         >
           ${roleOptions.map(
             (roleOption) =>
-              template`
+              html`
                 <option key=${roleOption} value=${roleOption}>
                   ${roleOption === 'all' ? 'Toate rolurile' : roleOption}
                 </option>
@@ -1364,31 +1372,31 @@ function ProfessorsPage({ onNotify }) {
       </div>
 
       ${filteredTeachers.length > 0
-        ? template`
+        ? html`
             <div className="grid grid-3">
               ${filteredTeachers.map(
                 (teacher) =>
-                  template`<${TeacherCard} key=${teacher.id} teacher=${teacher} onCopyEmail=${handleCopyEmail} />`
+                  html`<${CardProfesor} key=${teacher.id} teacher=${teacher} onCopyEmail=${handleCopyEmail} />`
               )}
             </div>
           `
-        : template`
+        : html`
             <article className="card empty-state">
               <h3>Nu există rezultate pentru căutarea ta</h3>
               <p>Încearcă alt text de căutare sau selectează alt rol din filtru.</p>
             </article>
           `}
-    </${Section}>
+    </${Sectiune}>
   `;
 }
 
-function ProfessorDetailPage() {
-  const requestedId = getQueryParameter('id');
-  const selectedTeacher = getTeacherById(requestedId);
+function PaginaProfilProfesor() {
+  const requestedId = getParamUrl('id');
+  const selectedTeacher = cautaProfesor(requestedId);
 
   if (!selectedTeacher) {
-    return template`
-      <${Section}
+    return html`
+      <${Sectiune}
         title="Profesorul nu a fost găsit"
         note="Verifică link-ul sau selectează un profil din lista completă de profesori."
       >
@@ -1396,15 +1404,15 @@ function ProfessorDetailPage() {
           <h3>Profil indisponibil</h3>
           <p>ID-ul profesorului nu corespunde niciunui profil din baza curentă.</p>
           <div className="card-actions">
-            <a className="ghost-button" href=${getHrefByKey('profesori')}>Înapoi la Profesori</a>
+            <a className="ghost-button" href=${getLinkPagina('profesori')}>Înapoi la Profesori</a>
           </div>
         </article>
-      </${Section}>
+      </${Sectiune}>
     `;
   }
 
-  return template`
-    <${Section}
+  return html`
+    <${Sectiune}
       title=${selectedTeacher.name}
       note=${`${selectedTeacher.role} · ${selectedTeacher.field}`}
     >
@@ -1423,11 +1431,11 @@ function ProfessorDetailPage() {
           <p className="meta-line"><strong>Email:</strong> ${selectedTeacher.email}</p>
           <p className="meta-line"><strong>Birou:</strong> ${selectedTeacher.office}</p>
           <p className="meta-line"><strong>Consultații:</strong> ${selectedTeacher.officeHours}</p>
-          ${(CV_FILES[selectedTeacher.name] || []).length > 0 ? template`
+          ${(fisiereCv[selectedTeacher.name] || []).length > 0 ? html`
             <div style=${{ marginTop: '16px' }}>
               <h3>Curriculum Vitae</h3>
               <div className="card-actions">
-                ${(CV_FILES[selectedTeacher.name] || []).map(cv => template`
+                ${(fisiereCv[selectedTeacher.name] || []).map(cv => html`
                   <a
                     key=${cv.file}
                     className="ghost-button"
@@ -1441,7 +1449,7 @@ function ProfessorDetailPage() {
           ` : null}
           <div className="card-actions">
             <a className="ghost-button" href=${`mailto:${selectedTeacher.email}`}>Contactează</a>
-            <a className="ghost-button" href=${getHrefByKey('profesori')}>Înapoi la Profesori</a>
+            <a className="ghost-button" href=${getLinkPagina('profesori')}>Înapoi la Profesori</a>
           </div>
         </article>
 
@@ -1450,37 +1458,37 @@ function ProfessorDetailPage() {
           <div className="tag-list">
             ${selectedTeacher.researchTags.map(
               (tagLabel) =>
-                template`<span key=${`${selectedTeacher.id}-${tagLabel}`} className="tag-pill">${tagLabel}</span>`
+                html`<span key=${`${selectedTeacher.id}-${tagLabel}`} className="tag-pill">${tagLabel}</span>`
             )}
           </div>
 
           <h3>Realizări</h3>
           <ul className="detail-list">
             ${selectedTeacher.achievements.map(
-              (item) => template`<li key=${`${selectedTeacher.id}-a-${item}`}>${item}</li>`
+              (item) => html`<li key=${`${selectedTeacher.id}-a-${item}`}>${item}</li>`
             )}
           </ul>
 
           <h3>Publicații și activitate științifică</h3>
           <ul className="detail-list">
             ${selectedTeacher.publications.map(
-              (item) => template`<li key=${`${selectedTeacher.id}-p-${item}`}>${item}</li>`
+              (item) => html`<li key=${`${selectedTeacher.id}-p-${item}`}>${item}</li>`
             )}
           </ul>
         </article>
       </div>
-    </${Section}>
+    </${Sectiune}>
   `;
 }
 
-function StudentsPage() {
-  return template`
-    <${Section} title="Planuri de studii — Documente oficiale" note="Apasă pe un program pentru a-l deschide direct în browser.">
+function PaginaStudenti() {
+  return html`
+    <${Sectiune} title="Planuri de studii — Documente oficiale" note="Apasă pe un program pentru a-l deschide direct în browser.">
       <div className="grid grid-2">
         <article className="card">
           <h3 style=${{ fontSize: '1.4rem' }}>Ciclul I — Licență</h3>
           <div className="card-actions" style=${{ flexDirection: 'column', alignItems: 'flex-start', gap: '10px', marginTop: '12px' }}>
-            ${STUDY_FILES.ciclu1.map(item => template`
+            ${planuriiDeStudii.ciclu1.map(item => html`
               <a
                 key=${item.file}
                 className="ghost-button"
@@ -1495,7 +1503,7 @@ function StudentsPage() {
         <article className="card">
           <h3 style=${{ fontSize: '1.4rem' }}>Ciclul II — Masterat</h3>
           <div className="card-actions" style=${{ flexDirection: 'column', alignItems: 'flex-start', gap: '10px', marginTop: '12px' }}>
-            ${STUDY_FILES.ciclu2.map(item => template`
+            ${planuriiDeStudii.ciclu2.map(item => html`
               <a
                 key=${item.file}
                 className="ghost-button"
@@ -1508,13 +1516,36 @@ function StudentsPage() {
           </div>
         </article>
       </div>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section} title="Calendar activități" note="Repere istorice și instituționale pentru evoluția Catedrei ITI." alt=${true}>
+    <${Sectiune} title="Premianți Olimpiadă" note="Studenți premiați la olimpiadele naționale de informatică." alt=${true}>
+      <div style=${{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '14px' }}>
+        ${[
+          { file: 'Premianti Olimpada 2023.jpg', label: 'Premianți Olimpiadă 2023' },
+          { file: 'Premianti Olimpada 2024.jpg', label: 'Premianți Olimpiadă 2024' },
+        ].map(item => html`
+          <a key=${item.file}
+             href=${'./fotografii/' + encodeURIComponent(item.file)}
+             target="_blank" rel="noopener noreferrer"
+             style=${{ display: 'block', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.18)', textDecoration: 'none' }}>
+            <img
+              src=${'./fotografii/' + encodeURIComponent(item.file)}
+              alt=${item.label || 'Olimpiadă'}
+              loading="lazy"
+              style=${{ width: '100%', height: '220px', objectFit: 'cover', display: 'block' }}
+              onError=${(e) => { e.target.parentElement.style.display = 'none'; }}
+            />
+            ${item.label && html`<p style=${{ textAlign: 'center', padding: '8px 10px', margin: 0, fontSize: '0.95rem', color: 'var(--text)' }}>${item.label}</p>`}
+          </a>
+        `)}
+      </div>
+    </${Sectiune}>
+
+    <${Sectiune} title="Calendar activități" note="Repere istorice și instituționale pentru evoluția Catedrei ITI.">
       <div className="timeline">
-        ${calendarItems.map(
+        ${evenimenteIstorice.map(
           (item) =>
-            template`
+            html`
               <article className="timeline-item" key=${`${item.date}-${item.title}`}>
                 <p className="timeline-date">${item.date}</p>
                 <h3>${item.title}</h3>
@@ -1523,25 +1554,25 @@ function StudentsPage() {
             `
         )}
       </div>
-    </${Section}>
+    </${Sectiune}>
   `;
 }
 
-function MediaPage() {
+function PaginaMedia() {
   const [activeTab, setActiveTab] = useState('galerie');
   const [selectedGalleryCategory, setSelectedGalleryCategory] = useState('Toate');
   const [lightboxItem, setLightboxItem] = useState(null);
 
   const galleryCategories = useMemo(() => {
-    return ['Toate', ...new Set(galleryItems.map((item) => item.category))];
+    return ['Toate', ...new Set(elementeGalerie.map((item) => item.category))];
   }, []);
 
   const filteredGalleryItems = useMemo(() => {
     if (selectedGalleryCategory === 'Toate') {
-      return galleryItems;
+      return elementeGalerie;
     }
 
-    return galleryItems.filter((item) => item.category === selectedGalleryCategory);
+    return elementeGalerie.filter((item) => item.category === selectedGalleryCategory);
   }, [selectedGalleryCategory]);
 
   useEffect(() => {
@@ -1559,8 +1590,8 @@ function MediaPage() {
     return () => window.removeEventListener('keydown', onEscapePress);
   }, [lightboxItem]);
 
-  return template`
-    <${Section}
+  return html`
+    <${Sectiune}
       title="Media"
       note="Comută între video și galerie; poți filtra elementele, iar imaginile se deschid în lightbox."
     >
@@ -1582,11 +1613,11 @@ function MediaPage() {
       </div>
 
       ${activeTab === 'video'
-        ? template`
+        ? html`
             <div className="grid grid-3">
-              ${videoItems.map(
+              ${videoclipuri.map(
                 (item) =>
-                  template`
+                  html`
                     <article className="card" key=${item.title}>
                       <div className="media-placeholder">Preview video</div>
                       <p className="chip">${item.tag}</p>
@@ -1597,7 +1628,7 @@ function MediaPage() {
               )}
             </div>
           `
-        : template`
+        : html`
             <div className="filter-bar compact">
               <select
                 className="select-control"
@@ -1606,7 +1637,7 @@ function MediaPage() {
               >
                 ${galleryCategories.map(
                   (categoryName) =>
-                    template`
+                    html`
                       <option key=${categoryName} value=${categoryName}>${categoryName}</option>
                     `
                 )}
@@ -1617,7 +1648,7 @@ function MediaPage() {
             <div className="grid grid-3">
               ${filteredGalleryItems.map(
                 (item) =>
-                  template`
+                  html`
                     <button
                       type="button"
                       className="card gallery-card"
@@ -1639,7 +1670,7 @@ function MediaPage() {
           `}
 
       ${lightboxItem
-        ? template`
+        ? html`
             <div className="lightbox-overlay" role="dialog" aria-modal="true" onClick=${() => setLightboxItem(null)}>
               <div className="lightbox-content" onClick=${(event) => event.stopPropagation()}>
                 <button type="button" className="lightbox-close" onClick=${() => setLightboxItem(null)}>
@@ -1655,21 +1686,21 @@ function MediaPage() {
             </div>
           `
         : null}
-    </${Section}>
+    </${Sectiune}>
   `;
 }
 
-function NoutatiPage() {
+function PaginaNoutati() {
   const [searchValue, setSearchValue] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Toate');
-  const highlightedArticleId = getQueryParameter('article');
+  const highlightedArticleId = getParamUrl('article');
 
-  const categories = useMemo(() => ['Toate', ...new Set(newsItems.map((item) => item.category))], []);
+  const categories = useMemo(() => ['Toate', ...new Set(articoleNoutati.map((item) => item.category))], []);
 
   const filteredNews = useMemo(() => {
-    const normalizedSearch = normalizeForSearch(searchValue);
+    const normalizedSearch = normalizeazaCautare(searchValue);
 
-    return sortedNewsItems.filter((item) => {
+    return noutatiSortate.filter((item) => {
       const matchesCategory = selectedCategory === 'Toate' || item.category === selectedCategory;
       if (!matchesCategory) {
         return false;
@@ -1679,33 +1710,33 @@ function NoutatiPage() {
         return true;
       }
 
-      return normalizeForSearch(`${item.title} ${item.excerpt} ${item.content}`).includes(normalizedSearch);
+      return normalizeazaCautare(`${item.title} ${item.excerpt} ${item.content}`).includes(normalizedSearch);
     });
   }, [searchValue, selectedCategory]);
 
   const highlightedArticle = useMemo(
-    () => sortedNewsItems.find((item) => item.id === normalizePage(highlightedArticleId)),
+    () => noutatiSortate.find((item) => item.id === normalizeazaPagina(highlightedArticleId)),
     [highlightedArticleId]
   );
 
-  return template`
-    <${Section}
+  return html`
+    <${Sectiune}
       title="Feed de noutăți"
       note="Filtrezi după categorie, cauți rapid și poți evidenția un articol prin link direct."
     >
       ${highlightedArticle
-        ? template`
+        ? html`
             <article className="card news-highlight">
               <p className="news-meta">${highlightedArticle.displayDate} · ${highlightedArticle.category}</p>
               <h3>${highlightedArticle.title}</h3>
               ${highlightedArticle.content.split('\n\n').map((para, i) =>
-                template`<p key=${i}>${para}</p>`
+                html`<p key=${i}>${para}</p>`
               )}
               ${highlightedArticle.photos && highlightedArticle.photos.length > 0
-                ? template`
+                ? html`
                     <div className="grid grid-3" style=${{ marginTop: '24px', gap: '8px' }}>
                       ${highlightedArticle.photos.map((src, i) =>
-                        template`
+                        html`
                           <img
                             key=${i}
                             src=${src}
@@ -1738,43 +1769,43 @@ function NoutatiPage() {
         >
           ${categories.map(
             (categoryName) =>
-              template`<option key=${categoryName} value=${categoryName}>${categoryName}</option>`
+              html`<option key=${categoryName} value=${categoryName}>${categoryName}</option>`
           )}
         </select>
         <p className="result-count">${filteredNews.length} articole</p>
       </div>
 
       ${filteredNews.length > 0
-        ? template`
+        ? html`
             <div className="timeline">
               ${filteredNews.map(
                 (item) =>
-                  template`
+                  html`
                     <article className="timeline-item news-card" key=${item.id}>
                       <p className="news-meta">${item.displayDate} · ${item.category}</p>
                       <h3>${item.title}</h3>
                       <p>${item.excerpt}</p>
                       <div className="card-actions">
-                        <a className="ghost-button" href=${getNewsHref(item.id)}>Citește detalii</a>
+                        <a className="ghost-button" href=${getLinkArticol(item.id)}>Citește detalii</a>
                       </div>
                     </article>
                   `
               )}
             </div>
           `
-        : template`
+        : html`
             <article className="card empty-state">
               <h3>Nu există articole pentru filtrul selectat</h3>
               <p>Schimbă categoria sau textul de căutare pentru a vedea rezultatele.</p>
             </article>
           `}
-    </${Section}>
+    </${Sectiune}>
   `;
 }
 
-function TendintePerspectivePage() {
-  return template`
-    <${Section}
+function PaginaIstoricCatedra() {
+  return html`
+    <${Sectiune}
       title="Istoricul Catedrei Informatică și Tehnologii Informaționale"
       note="Material sintetic bazat pe istoria, activitatea științifico-didactică și direcțiile de dezvoltare ale Catedrei ITI."
     >
@@ -1786,20 +1817,20 @@ function TendintePerspectivePage() {
           specialiștilor competitivi.
         </p>
       </article>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section} title="Cuprins" alt=${true}>
+    <${Sectiune} title="Cuprins" alt=${true}>
       <div className="grid grid-2">
-        ${tendinteChapters.map(
-          (chapter, index) => template`<article className="card" key=${chapter}><p>${index + 1}. ${chapter}</p></article>`
+        ${capitoleIstorice.map(
+          (chapter, index) => html`<article className="card" key=${chapter}><p>${index + 1}. ${chapter}</p></article>`
         )}
       </div>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section} title="Repere istorice">
+    <${Sectiune} title="Repere istorice">
       <div className="timeline">
-        ${historicalTimeline.map(
-          (item) => template`
+        ${cronologieCatedra.map(
+          (item) => html`
             <article className="timeline-item" key=${`${item.year}-${item.title}`}>
               <p className="timeline-date">${item.year}</p>
               <h3>${item.title}</h3>
@@ -1808,50 +1839,50 @@ function TendintePerspectivePage() {
           `
         )}
       </div>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section} title="Echipamente, dotare și activități" alt=${true}>
+    <${Sectiune} title="Echipamente, dotare și activități" alt=${true}>
       <div className="grid grid-2">
         <article className="card">
           <h3>Infrastructură actuală</h3>
           <ul className="detail-list">
-            ${currentFacilities.map((item) => template`<li key=${item}>${item}</li>`) }
+            ${facilitatiActuale.map((item) => html`<li key=${item}>${item}</li>`) }
           </ul>
         </article>
         <article className="card">
           <h3>Specialități deservite</h3>
           <ul className="detail-list">
-            ${studySpecialties.map((item) => template`<li key=${item}>${item}</li>`) }
+            ${specialitatiStudii.map((item) => html`<li key=${item}>${item}</li>`) }
           </ul>
         </article>
       </div>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section} title="Activitatea științifico-didactică">
+    <${Sectiune} title="Activitatea științifico-didactică">
       <div className="grid grid-2">
         <article className="card">
           <h3>Ciclul I (Licență)</h3>
           <ul className="detail-list">
-            ${bachelorDisciplines.map((item) => template`<li key=${item}>${item}</li>`) }
+            ${disciplineLicenta.map((item) => html`<li key=${item}>${item}</li>`) }
           </ul>
         </article>
         <article className="card">
           <h3>Ciclul II (Masterat)</h3>
           <ul className="detail-list">
-            ${masterDisciplines.map((item) => template`<li key=${item}>${item}</li>`) }
+            ${disciplineMasterat.map((item) => html`<li key=${item}>${item}</li>`) }
           </ul>
         </article>
       </div>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section} title="Cercetare: rezultate și perspective" alt=${true}>
+    <${Sectiune} title="Cercetare: rezultate și perspective" alt=${true}>
       <div className="grid grid-3">
-        ${researchDirections.map(
-          (direction) => template`
+        ${directiiCercetare.map(
+          (direction) => html`
             <article className="card" key=${direction.title}>
               <h3>${direction.title}</h3>
               <ul className="detail-list">
-                ${direction.topics.map((topic) => template`<li key=${topic}>${topic}</li>`) }
+                ${direction.topics.map((topic) => html`<li key=${topic}>${topic}</li>`) }
               </ul>
             </article>
           `
@@ -1860,37 +1891,37 @@ function TendintePerspectivePage() {
       <article className="card">
         <h3>Proiecte relevante</h3>
         <ul className="detail-list">
-          ${majorProjects.map((item) => template`<li key=${item}>${item}</li>`) }
+          ${proiecteMajore.map((item) => html`<li key=${item}>${item}</li>`) }
         </ul>
       </article>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section}
+    <${Sectiune}
       title="Interferențe științifice și cooperări eficiente"
       note="Catedra ITI colaborează cu instituții universitare naționale și internaționale în proiecte de educație și cercetare."
     >
       <article className="card">
         <ul className="detail-list">
-          ${partnerInstitutions.map((item) => template`<li key=${item}>${item}</li>`) }
+          ${institutiiPartenere.map((item) => html`<li key=${item}>${item}</li>`) }
         </ul>
       </article>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section} title="Membrii Catedrei ITI" alt=${true}>
+    <${Sectiune} title="Membrii Catedrei ITI" alt=${true}>
       <article className="card">
         <ul className="detail-list columns-list">
-          ${presentMembers.map((item) => template`<li key=${item}>${item}</li>`) }
+          ${membriCatedra.map((item) => html`<li key=${item}>${item}</li>`) }
         </ul>
       </article>
-    </${Section}>
+    </${Sectiune}>
 
-    <${Section}
+    <${Sectiune}
       title="Știați că..."
       note="Date instituționale despre UST și rolul Catedrei ITI în dezvoltarea educației informatice."
     >
       <div className="grid grid-2">
-        ${didYouKnowFacts.map(
-          (fact) => template`
+        ${curiozitati.map(
+          (fact) => html`
             <article className="card" key=${fact}>
               <p>${fact}</p>
             </article>
@@ -1904,11 +1935,11 @@ function TendintePerspectivePage() {
           didactice. Motto-ul de perspectivă rămâne valabil: <strong>Ubi concordia, ibi victoria.</strong>
         </p>
       </article>
-    </${Section}>
+    </${Sectiune}>
   `;
 }
 
-function ContactPage({ onNotify }) {
+function PaginaContact({ onNotify }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -1917,8 +1948,8 @@ function ContactPage({ onNotify }) {
   const [status, setStatus] = useState('idle');
 
   const handleInputChange = (fieldName, fieldValue) => {
-    setFormData((previousState) => ({
-      ...previousState,
+    setFormData((prev) => ({
+      ...prev,
       [fieldName]: fieldValue
     }));
   };
@@ -1948,8 +1979,8 @@ function ContactPage({ onNotify }) {
     onNotify('Formular validat local. Poți conecta ulterior un backend real.');
   };
 
-  return template`
-    <${Section}
+  return html`
+    <${Sectiune}
       title="Date de contact"
       note="Secțiune extinsă cu formular demo și validare locală pentru un flux mai avansat."
     >
@@ -2024,41 +2055,41 @@ function ContactPage({ onNotify }) {
 
             <button type="submit" className="button form-submit">Trimite (demo)</button>
             ${status === 'success'
-              ? template`<p className="status-message success">Mesaj validat local cu succes.</p>`
+              ? html`<p className="status-message success">Mesaj validat local cu succes.</p>`
               : null}
             ${status === 'error'
-              ? template`<p className="status-message error">Completează corect câmpurile pentru a continua.</p>`
+              ? html`<p className="status-message error">Completează corect câmpurile pentru a continua.</p>`
               : null}
           </form>
         </article>
       </div>
-    </${Section}>
+    </${Sectiune}>
   `;
 }
 
-const PAGE_COMPONENTS = {
-  home: HomePage,
-  despre: AboutPage,
-  profesori: ProfessorsPage,
-  profesor: ProfessorDetailPage,
-  studenti: StudentsPage,
-  media: MediaPage,
-  noutati: NoutatiPage,
-  tendinte: TendintePerspectivePage,
-  contact: ContactPage
+const componentePagini = {
+  home: PaginaAcasa,
+  despre: PaginaDescriere,
+  profesori: PaginaProfesori,
+  profesor: PaginaProfilProfesor,
+  studenti: PaginaStudenti,
+  media: PaginaMedia,
+  noutati: PaginaNoutati,
+  tendinte: PaginaIstoricCatedra,
+  contact: PaginaContact
 };
 
-function PageContent({ activePage, onNotify }) {
-  const ActiveComponent = PAGE_COMPONENTS[activePage] || HomePage;
-  const componentNeedsNotify = ActiveComponent === ProfessorsPage || ActiveComponent === ContactPage;
+function ContinutPagina({ activePage, onNotify }) {
+  const ActiveComponent = componentePagini[activePage] || PaginaAcasa;
+  const componentNeedsNotify = ActiveComponent === PaginaProfesori || ActiveComponent === PaginaContact;
 
   return componentNeedsNotify
-    ? template`<${ActiveComponent} onNotify=${onNotify} />`
-    : template`<${ActiveComponent} />`;
+    ? html`<${ActiveComponent} onNotify=${onNotify} />`
+    : html`<${ActiveComponent} />`;
 }
 
-function SiteFooter() {
-  return template`
+function SubsolSite() {
+  return html`
     <footer className="footer">
       <div className="container footer-inner">
         <p>© ${new Date().getFullYear()} Catedra Informatică și Tehnologii Informaționale</p>
@@ -2068,7 +2099,7 @@ function SiteFooter() {
   `;
 }
 
-function BackToTopButton() {
+function ButonSus() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -2083,7 +2114,7 @@ function BackToTopButton() {
     return null;
   }
 
-  return template`
+  return html`
     <button
       type="button"
       className="floating-top"
@@ -2095,12 +2126,12 @@ function BackToTopButton() {
   `;
 }
 
-function Toast({ message }) {
+function Notificare({ message }) {
   if (!message) {
     return null;
   }
 
-  return template`
+  return html`
     <div className="toast" role="status" aria-live="polite">
       ${message}
     </div>
@@ -2108,23 +2139,23 @@ function Toast({ message }) {
 }
 
 function App() {
-  const activePage = getActivePageKey();
-  const selectedTeacherForSeo = activePage === 'profesor' ? getTeacherById(getQueryParameter('id')) : null;
-  const [theme, setTheme] = useState(getInitialTheme);
-  const [visitCount] = useState(registerAndGetVisitCount);
+  const activePage = getPaginaActiva();
+  const selectedTeacherForSeo = activePage === 'profesor' ? cautaProfesor(getParamUrl('id')) : null;
+  const [theme, setTheme] = useState(getTemaInitiala);
+  const [visitCount] = useState(inregistreazaVizita);
   const [toastMessage, setToastMessage] = useState('');
   const toastTimerReference = useRef(null);
 
   useEffect(() => {
-    applyTheme(theme);
+    aplicaTema(theme);
   }, [theme]);
 
   useEffect(() => {
-    registerServiceWorkerIfPossible();
+    initServiceWorker();
   }, []);
 
   useEffect(() => {
-    updateSeoForPage(activePage, selectedTeacherForSeo);
+    actualizeazaSeo(activePage, selectedTeacherForSeo);
   }, [activePage, selectedTeacherForSeo]);
 
   useEffect(() => {
@@ -2147,21 +2178,21 @@ function App() {
     }, 2600);
   };
 
-  return template`
+  return html`
     <div className="site-shell">
-      <${SiteHeader}
+      <${AntetSite}
         activePage=${activePage}
         theme=${theme}
         visitCount=${visitCount}
         onToggleTheme=${() =>
-          setTheme((previousTheme) => (previousTheme === 'light' ? 'dark' : 'light'))}
+          setTheme((t) => (previousTheme === 'light' ? 'dark' : 'light'))}
       />
       <main style=${{ fontSize: '1.08rem', lineHeight: 1.65, letterSpacing: '0.01em' }}>
-        <${PageContent} activePage=${activePage} onNotify=${notify} />
+        <${ContinutPagina} activePage=${activePage} onNotify=${notify} />
       </main>
-      <${SiteFooter} />
-      <${BackToTopButton} />
-      <${Toast} message=${toastMessage} />
+      <${SubsolSite} />
+      <${ButonSus} />
+      <${Notificare} message=${toastMessage} />
     </div>
   `;
 }
@@ -2169,7 +2200,7 @@ function App() {
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(template`<${App} />`);
+  ReactDOM.createRoot(rootElement).render(html`<${App} />`);
 }
 
 
