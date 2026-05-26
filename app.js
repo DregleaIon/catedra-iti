@@ -169,6 +169,16 @@ const profesoriCatedra = [
     email: 'zugravu.nicoleta@upsc.md',
     bio: 'Laborant superior în cadrul Catedrei ITI.',
     researchTags: ['Suport laborator']
+  },
+  {
+    name: 'Ion Dreglea',
+    role: 'laborant',
+    field: 'Suport laborator',
+    subjects: '',
+    email: '',
+    photo: './fotografii/Ion Dreglea.jpg',
+    bio: 'Laborant în cadrul Catedrei ITI.',
+    researchTags: ['Suport laborator']
   }
 ];
 
