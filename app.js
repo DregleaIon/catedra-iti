@@ -175,7 +175,7 @@ const profesoriCatedra = [
     role: 'laborant',
     field: 'Suport laborator',
     subjects: '',
-    email: '',
+    email: 'dreglea66@gmail.com',
     photo: './fotografii/Ion Dreglea.jpg',
     bio: 'Laborant în cadrul Catedrei ITI.',
     researchTags: ['Suport laborator']
